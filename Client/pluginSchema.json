@@ -1,0 +1,20 @@
+{
+    "title" : "Progress Bar Plugin schema",
+    "description" : "Schema for setting displayed percent on progress bar",
+    "type" : "object",
+
+    "properties" : {
+        "value" : {
+            "description" : "Value of property",
+            "type" : "number"
+        },
+        "maxValue" : {
+            "description" : "Maximal value of property",
+            "type" : "number"
+        },
+        "minValue" : {
+            "description" : "Minimal value of property",
+            "type" : "number"
+        }
+    }
+}

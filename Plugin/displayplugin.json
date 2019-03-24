@@ -1,0 +1,7 @@
+{
+    "type" :            "communication",
+    "name" :            "DisplayPlugin",
+    "longname" :        "DisplayPlugin",
+    "version" :         "1.1",
+    "dependencies" :    []
+}
