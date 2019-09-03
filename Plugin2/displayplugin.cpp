@@ -1,6 +1,7 @@
 #include "displayplugin.h"
 #include <QJsonDocument>
 #include <QLabel>
+#include <QDebug>
 
 DisplayPlugin::DisplayPlugin():
     m_DisplayWidget(new Display()),
@@ -106,11 +107,11 @@ StatusEnum DisplayPlugin::receiveMessage(QString message, QTextStream &errorStre
                 {
                     if (alignValue.toString() == "true")
                     {
-                        alignValue = true;
+                        alignToRight = true;
                     }
                     else
                     {
-                        alignValue = false;
+                        alignToRight = false;
                     }
                 }
                 else

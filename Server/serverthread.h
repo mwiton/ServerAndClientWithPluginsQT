@@ -12,7 +12,6 @@ public:
     explicit ServerThread(qintptr ID, QObject *parent = 0);
 
     void run();
-    ~ServerThread();
 
 signals:
     void messageReceivedfromClient(QString message);

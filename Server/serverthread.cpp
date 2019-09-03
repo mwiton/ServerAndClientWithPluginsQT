@@ -58,9 +58,3 @@ void ServerThread::disconnected()
     socket->deleteLater();
     exit(0);
 }
-
-ServerThread::~ServerThread()
-{
-    socket->deleteLater();
-    exit(0);
-}
