@@ -36,14 +36,9 @@ bool JsonLoader::loadFile(QString fileName)
     return result;
 }
 
-QSharedPointer<QFormLayout> JsonLoader::getFormLayout()
+QSharedPointer<ComponentForJsonScheme> JsonLoader::getJsonComponent()
 {
-    QSharedPointer<QFormLayout> layoutPtr;
-    if(m_CurrrentJsonScheme)
-    {
-        layoutPtr = m_CurrrentJsonScheme->getFormLayout();
-    }
-    return layoutPtr;
+    return m_CurrrentJsonScheme;
 }
 
 

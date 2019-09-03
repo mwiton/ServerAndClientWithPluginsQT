@@ -3,6 +3,7 @@
 
 #include <QMainWindow>
 #include "jsonloader.h"
+#include "clienttoserver.h"
 
 namespace Ui {
 class MainWindow;
@@ -18,6 +19,7 @@ public:
 
 private slots:
     void choosePluginFile();
+    void sendJsonMessage();
 
 private:
     void setFormLayout();
@@ -25,8 +27,10 @@ private:
     Ui::MainWindow *ui;
     JsonLoader m_JsonLoader;
     QSharedPointer<QFormLayout> m_FormLayout;
-    QString m_LastDirectory{"."};
+    QString m_LastDirectory;
     Logger &m_Logger;
+    QSharedPointer<ComponentForJsonScheme> jsonComponent;
+    ClientToServer m_ClientObject;
 };
 
 #endif // MAINWINDOW_H

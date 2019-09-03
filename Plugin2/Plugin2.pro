@@ -1,15 +1,10 @@
-#-------------------------------------------------
-#
-# Project created by QtCreator 2019-03-24T10:47:37
-#
-#-------------------------------------------------
-
-QT       += core gui network
+TEMPLATE=lib
+CONFIG += plugin
+QT       += core gui
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
-TARGET = Client
-TEMPLATE = app
+TARGET = $$qtLibraryTarget(textplugin)
 
 # The following define makes your compiler emit warnings if you use
 # any feature of Qt which as been marked as deprecated (the exact warnings
@@ -23,21 +18,14 @@ DEFINES += QT_DEPRECATED_WARNINGS
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 
-SOURCES += main.cpp\
-        mainwindow.cpp \
-    jsonloader.cpp \
-    componentforjsonscheme.cpp \
-    logger.cpp \
-    clienttoserver.cpp
+SOURCES +=\
+        display.cpp \
+    displayplugin.cpp
 
-HEADERS  += mainwindow.h \
-    jsonloader.h \
-    componentforjsonscheme.h \
-    logger.h \
-    clienttoserver.h
+HEADERS  += display.h \
+    plugininterface.h \
+    displayplugin.h
 
-FORMS    += mainwindow.ui
+FORMS    += display.ui
 
-DISTFILES += \
-    pluginSchema.json \
-    textPluginSchema.json
+DESTDIR = ./plugin2Build

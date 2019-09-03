@@ -12,7 +12,7 @@ class JsonLoader
 public:
     JsonLoader();
     bool loadFile(QString fileName);
-    QSharedPointer<QFormLayout> getFormLayout();
+    QSharedPointer<ComponentForJsonScheme> getJsonComponent();
 
 private:
     QSharedPointer<ComponentForJsonScheme> m_CurrrentJsonScheme;

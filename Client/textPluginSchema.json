@@ -1,0 +1,25 @@
+{
+    "title" : "Text Label Plugin schema",
+    "description" : "Schema for setting text in label and some settings",
+    "type" : "object",
+
+    "properties" : {
+        "text" : {
+            "description" : "Value of property",
+            "type" : "string"
+        },
+        "size" : {
+            "description" : "Maximal value of property",
+            "type" : "number"
+        },
+        "color" : {
+            "description" : "Minimal value of property",
+            "type" : "enum",
+            "enum" : ["blue", "black", "red", "green"]
+        },
+        "alignRight" : {
+            "description" : "Minimal value of property",
+            "type" : "bool"
+        }
+    }
+}

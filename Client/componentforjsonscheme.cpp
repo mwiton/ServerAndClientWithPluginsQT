@@ -19,6 +19,7 @@ ComponentJsonField::ComponentJsonField(): type(EType::UNDEFINED) {}
 
 ComponentForJsonScheme::ComponentForJsonScheme(const QJsonObject &schemaObject): m_SchemaObject(schemaObject),  m_Logger(Logger::getLogger())
 {
+    m_Fields.clear();
     QJsonValue nameValue = schemaObject.value("title");
     if (nameValue == QJsonValue::Undefined || !nameValue.isString())
     {
@@ -109,7 +110,13 @@ ComponentForJsonScheme::ComponentForJsonScheme(const QJsonObject &schemaObject):
 
 QJsonDocument ComponentForJsonScheme::createJsonMessage()
 {
-
+    QJsonObject jsonObject;
+    for (auto field : m_Fields)
+    {
+        jsonObject[field->name] = field->value;
+    }
+    QJsonDocument jsonDoc(jsonObject);
+    return jsonDoc;
 }
 
 EType ComponentForJsonScheme::getEnumType(QString name)
@@ -133,6 +140,7 @@ void ComponentForJsonScheme::createQFormLayout()
         if (!(*fieldIter)->valuesForEnum.empty())
         {
             QComboBox *comboBox = new QComboBox();
+            comboBox->addItem("");
             for (QString enumValue : (*fieldIter)->valuesForEnum)
             {
                 comboBox->addItem(enumValue);
@@ -143,6 +151,7 @@ void ComponentForJsonScheme::createQFormLayout()
         else if((*fieldIter)->type == EType::BOOL)
         {
             QComboBox *comboBox = new QComboBox();
+            comboBox->addItem("");
             comboBox->addItem("true");
             comboBox->addItem("false");
             QObject::connect(comboBox, SIGNAL(currentIndexChanged(QString)), fieldIter->data(), SLOT(setValue(QString)));
@@ -168,9 +177,10 @@ void ComponentForJsonScheme::createQFormLayout()
             (*fieldIter)->widget = QSharedPointer<QWidget>(lineEdit);
         }
 
-        if((*fieldIter)->widget)
+        if((*fieldIter)->widget != nullptr)
         {
-            m_FormLayout->addRow((*fieldIter)->name, (*fieldIter)->widget.data());
+            (*fieldIter)->label = QSharedPointer<QLabel>(new QLabel((*fieldIter)->name));
+            m_FormLayout->addRow((*fieldIter)->label.data(), (*fieldIter)->widget.data());
         }
     }
 

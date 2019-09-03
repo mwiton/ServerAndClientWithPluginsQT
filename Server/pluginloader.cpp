@@ -42,10 +42,23 @@ QSharedPointer<QWidget> PluginLoader::getPluginWidget()
     return nullptr;
 }
 
-void PluginLoader::receiveMessage(const QString message)
+void PluginLoader::receiveMessage(const QString &message)
 {
-    StatusEnum status = m_Plugin->receiveMessage(message);
-    auto findStr = s_StatusEnumStrigs.find(status);
-    QString statusStr = findStr != s_StatusEnumStrigs.end() ? *findStr : "";
-    m_Logger << "Status of message from plugin is: " << statusStr << '\n';
+    if(m_Plugin != nullptr)
+    {
+        QByteArray errorByteArray;
+        QTextStream errorStream(&errorByteArray);
+        StatusEnum status = m_Plugin->receiveMessage(message, errorStream);
+        auto findStr = s_StatusEnumStrigs.find(status);
+        QString statusStr = findStr != s_StatusEnumStrigs.end() ? *findStr : "";
+        m_Logger << "Status of message from plugin is: " << statusStr << '\n';
+        if (status == StatusEnum::FAILURE)
+        {
+            m_Logger << "Error from plugin: " << QString(errorByteArray);
+        }
+    }
+    else
+    {
+        m_Logger << "Plugin was not loaded\n";
+    }
 }

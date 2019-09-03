@@ -7,12 +7,16 @@
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow),
-    m_Logger(Logger::getLogger())
+    m_LastDirectory(QDir::currentPath()),
+    m_Logger(Logger::getLogger()),
+    serverObject(new ServerForClients)
 {
     ui->setupUi(this);
     connect(ui->chooseFileButton, SIGNAL(released()), this, SLOT(choosePluginFile()));
     connect(ui->actionChoose_plugin, SIGNAL(triggered(bool)), this, SLOT(choosePluginFile()));
+    connect(serverObject.data(), SIGNAL(messageReceived(QString)), this, SLOT(sendMessageToPlugin(QString)));
     connect(&m_Logger, SIGNAL(broadcastMessage(QString)), ui->loggerTextArea, SLOT(appendPlainText(QString)));
+    serverObject->startServer(1234);
 }
 
 MainWindow::~MainWindow()
@@ -64,4 +68,10 @@ void MainWindow::setPluginDisplay()
     {
         m_Logger << "No plugin widget\n";
     }
+}
+
+void MainWindow::sendMessageToPlugin(QString data)
+{
+    m_PluginLoader.receiveMessage(data);
+
 }

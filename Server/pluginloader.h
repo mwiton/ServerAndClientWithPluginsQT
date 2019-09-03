@@ -8,10 +8,10 @@
 class PluginLoader
 {
 public:
-    PluginLoader() : m_Logger(Logger::getLogger()) {}
+    PluginLoader() : m_Plugin(nullptr), m_Logger(Logger::getLogger()) {}
     bool loadNewPlugin(const QString &fileName);
     QSharedPointer<QWidget> getPluginWidget();
-    void receiveMessage(const QString message);
+    void receiveMessage(const QString &message);
 
 private:
     PluginInterface *m_Plugin;

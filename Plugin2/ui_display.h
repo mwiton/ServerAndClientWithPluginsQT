@@ -14,7 +14,7 @@
 #include <QtWidgets/QApplication>
 #include <QtWidgets/QButtonGroup>
 #include <QtWidgets/QHeaderView>
-#include <QtWidgets/QProgressBar>
+#include <QtWidgets/QLabel>
 #include <QtWidgets/QWidget>
 
 QT_BEGIN_NAMESPACE
@@ -22,18 +22,29 @@ QT_BEGIN_NAMESPACE
 class Ui_Display
 {
 public:
-    QProgressBar *progressBar;
+    QLabel *textLabel;
 
     void setupUi(QWidget *Display)
     {
         if (Display->objectName().isEmpty())
             Display->setObjectName(QStringLiteral("Display"));
-        Display->resize(135, 66);
+        Display->resize(458, 83);
         Display->setMinimumSize(QSize(135, 66));
-        progressBar = new QProgressBar(Display);
-        progressBar->setObjectName(QStringLiteral("progressBar"));
-        progressBar->setGeometry(QRect(10, 20, 118, 23));
-        progressBar->setValue(0);
+        textLabel = new QLabel(Display);
+        textLabel->setObjectName(QStringLiteral("textLabel"));
+        textLabel->setGeometry(QRect(20, 0, 421, 71));
+        QPalette palette;
+        QBrush brush(QColor(0, 0, 0, 255));
+        brush.setStyle(Qt::SolidPattern);
+        palette.setBrush(QPalette::Active, QPalette::WindowText, brush);
+        palette.setBrush(QPalette::Inactive, QPalette::WindowText, brush);
+        QBrush brush1(QColor(120, 120, 120, 255));
+        brush1.setStyle(Qt::SolidPattern);
+        palette.setBrush(QPalette::Disabled, QPalette::WindowText, brush1);
+        textLabel->setPalette(palette);
+        QFont font;
+        font.setPointSize(8);
+        textLabel->setFont(font);
 
         retranslateUi(Display);
 
@@ -43,6 +54,7 @@ public:
     void retranslateUi(QWidget *Display)
     {
         Display->setWindowTitle(QApplication::translate("Display", "Display", Q_NULLPTR));
+        textLabel->setText(QApplication::translate("Display", "TextLabel", Q_NULLPTR));
     } // retranslateUi
 
 };

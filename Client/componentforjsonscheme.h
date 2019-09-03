@@ -6,6 +6,8 @@
 #include <QWidget>
 #include <QJsonObject>
 #include <QObject>
+#include <QDebug>
+#include <QLabel>
 
 #include "logger.h"
 
@@ -31,6 +33,7 @@ public:
     QVector<QString> valuesForEnum;
     QString value;
     QSharedPointer<QWidget> widget;
+    QSharedPointer<QLabel> label;
 
 public slots:
     void setValue(const QString &newValue)

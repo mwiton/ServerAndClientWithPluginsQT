@@ -4,7 +4,7 @@
 #
 #-------------------------------------------------
 
-QT       += core gui
+QT       += core gui network
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -26,11 +26,15 @@ DEFINES += QT_DEPRECATED_WARNINGS
 SOURCES += main.cpp\
         mainwindow.cpp \
     pluginloader.cpp \
-    logger.cpp
+    logger.cpp \
+    serverforclients.cpp \
+    serverthread.cpp
 
 HEADERS  += mainwindow.h \
     plugininterface.h \
     pluginloader.h \
-    logger.h
+    logger.h \
+    serverforclients.h \
+    serverthread.h
 
 FORMS    += mainwindow.ui

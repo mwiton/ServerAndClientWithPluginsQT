@@ -2,6 +2,7 @@
 #define PLUGININTERFACE_H
 
 #include <QSharedPointer>
+#include <QTextStream>
 
 enum class StatusEnum{
     SUCCESS,
@@ -15,7 +16,7 @@ public:
 
     virtual const QString& getName() const = 0;
     virtual QSharedPointer<QWidget> getWidget() = 0;
-    virtual StatusEnum receiveMessage(QString message) = 0;
+    virtual StatusEnum receiveMessage(QString message, QTextStream &errorStream) = 0;
 };
 
 #define PLUGININTERFACE_iid "pl.mwiton.PluginInterface"
