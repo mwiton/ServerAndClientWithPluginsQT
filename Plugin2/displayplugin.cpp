@@ -56,16 +56,16 @@ StatusEnum DisplayPlugin::receiveMessage(QString message, QTextStream &errorStre
             bool allFieldsFound = true;
             auto valueFromJson = getStringFromJSON(messageObject, "text", errorStream);
             QString text = valueFromJson.first;
-            allFieldsFound = valueFromJson.second : allFieldsFound ? false;
+            allFieldsFound = valueFromJson.second ? allFieldsFound : false;
 
             valueFromJson = getStringFromJSON(messageObject, "color", errorStream);
             QString colorStylesheet = "QLabel { color : " + valueFromJson.first + "; }";
-            allFieldsFound = valueFromJson.second : allFieldsFound ? false;
+            allFieldsFound = valueFromJson.second ? allFieldsFound : false;
 
             bool isNumber = false;
             valueFromJson = getStringFromJSON(messageObject, "size", errorStream);
             int size = valueFromJson.first.toInt(&isNumber);
-            allFieldsFound = valueFromJson.second : allFieldsFound ? false;
+            allFieldsFound = valueFromJson.second ? allFieldsFound : false;
             if(!isNumber)
             {
                 errorStream << "Size field is not integer\n";
@@ -74,16 +74,16 @@ StatusEnum DisplayPlugin::receiveMessage(QString message, QTextStream &errorStre
 
             valueFromJson = getStringFromJSON(messageObject, "alignRight", errorStream);
             bool alignToRight=false;
-            if (valueFromJson.first.toString() == "true" || valueFromJson.first.toString() == "false")
+            if (valueFromJson.first == "true" || valueFromJson.first == "false")
             {
-                alignToRight = valueFromJson.first.toString() == "true";
+                alignToRight = valueFromJson.first == "true";
             }
             else
             {
                 errorStream << "alignRight field does not contain bool value\n";
                 allFieldsFound = false;
             }
-            allFieldsFound = valueFromJson.second : allFieldsFound ? false;
+            allFieldsFound = valueFromJson.second ? allFieldsFound : false;
 
             if (allFieldsFound)
             {

@@ -22,7 +22,7 @@ public:
 
 private:
     // get value of field sent in JSON
-    QPair <QString, bool> DisplayPlugin::getStringFromJSON(const QJsonObject &messageObject, const QString &nameOfValue, QTextStream &errorStream);
+    QPair <QString, bool> getStringFromJSON(const QJsonObject &messageObject, const QString &nameOfValue, QTextStream &errorStream);
 
     QSharedPointer<Display> m_DisplayWidget;
     const QString m_PluginName;

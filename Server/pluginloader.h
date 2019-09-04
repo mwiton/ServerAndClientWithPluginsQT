@@ -3,6 +3,7 @@
 
 #include "plugininterface.h"
 #include "logger.h"
+#include <QPluginLoader>
 
 /**
  *  Class which loads plugin dll with plugin object
@@ -34,6 +35,7 @@ public:
 private:
     PluginInterface *m_Plugin;
     Logger &m_Logger;
+    QPluginLoader m_PluginLoader;
 
     static const QMap<StatusEnum, QString> s_StatusEnumStrigs;
 };

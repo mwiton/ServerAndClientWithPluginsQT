@@ -32,8 +32,8 @@ void DisplayPlugin::findValuesForFields(QMap<QString, JsonValue> &foundKeys, con
                 double value = messageElement.value().toString().toDouble(&isNumber);
                 if(isNumber)
                 {
-                    jsonValue->second.value = value;
-                    jsonValue->second.isSet = true;
+                    jsonValue.value().value = value;
+                    jsonValue.value().isSet = true;
                 }
                 else
                 {
@@ -58,7 +58,7 @@ StatusEnum DisplayPlugin::receiveMessage(QString message, QTextStream &errorStre
         if(jsonMessage.isObject())
         {
             auto messageObject = jsonMessage.object();
-            findValuesForFields(foundKeys, messageObject);
+            findValuesForFields(foundKeys, messageObject, errorStream);
         
             bool isAllFound = true;
             QString notFoundKeys = "";
@@ -84,7 +84,7 @@ StatusEnum DisplayPlugin::receiveMessage(QString message, QTextStream &errorStre
                         valueToSet = 100;
                     }
                     else {
-                        valueToSet = v / (max - min) * 100;
+                        valueToSet = (v - min) / (max - min) * 100;
                     }
                     mutex.lock();
                     m_DisplayWidget->ui->progressBar->setValue(static_cast<int>(round(valueToSet)));

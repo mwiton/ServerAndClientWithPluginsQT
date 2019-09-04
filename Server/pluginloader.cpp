@@ -1,5 +1,4 @@
 #include "pluginloader.h"
-#include <QPluginLoader>
 #include <QDebug>
 
 const QMap<StatusEnum, QString> PluginLoader::s_StatusEnumStrigs = QMap<StatusEnum, QString>{
@@ -10,8 +9,9 @@ const QMap<StatusEnum, QString> PluginLoader::s_StatusEnumStrigs = QMap<StatusEn
 bool PluginLoader::loadNewPlugin(const QString &fileName)
 {
     bool result(false);
-    QPluginLoader pluginLoader(fileName);
-    QObject *plugin = pluginLoader.instance();
+    m_PluginLoader.unload();
+    m_PluginLoader.setFileName(fileName);
+    QObject *plugin = m_PluginLoader.instance();
     if(plugin)
     {
         PluginInterface *pluginImpl = qobject_cast<PluginInterface *>(plugin);
