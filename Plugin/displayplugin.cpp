@@ -19,6 +19,35 @@ QSharedPointer<QWidget> DisplayPlugin::getWidget()
     return m_DisplayWidget;
 }
 
+void DisplayPlugin::findValuesForFields(QMap<QString, JsonValue> &foundKeys, const QJsonObject &messageObject, QTextStream &errorStream)
+{
+    for (auto messageElement = messageObject.begin(); messageElement != messageObject.end(); ++messageElement)
+    {
+        auto jsonValue = foundKeys.find(messageElement.key());
+        if (jsonValue != foundKeys.end())
+        {
+            if(messageElement.value().isString())
+            {
+                bool isNumber = false;
+                double value = messageElement.value().toString().toDouble(&isNumber);
+                if(isNumber)
+                {
+                    jsonValue->second.value = value;
+                    jsonValue->second.isSet = true;
+                }
+                else
+                {
+                    errorStream << "Key " << messageElement.key() << " is not number\n";
+                }
+            }
+            else
+            {
+                errorStream << "Key " << messageElement.key() << " in JSON is not type of string\n";
+            }
+        }
+    }
+}
+
 StatusEnum DisplayPlugin::receiveMessage(QString message, QTextStream &errorStream)
 {
     StatusEnum status = StatusEnum::FAILURE;
@@ -29,31 +58,8 @@ StatusEnum DisplayPlugin::receiveMessage(QString message, QTextStream &errorStre
         if(jsonMessage.isObject())
         {
             auto messageObject = jsonMessage.object();
-            for (auto messageElement = messageObject.begin(); messageElement != messageObject.end(); ++messageElement)
-            {
-                if(foundKeys.find(messageElement.key()) != foundKeys.end())
-                {
-
-                    if(messageElement.value().isString())
-                    {
-                        bool isNumber = false;
-                        double value = messageElement.value().toString().toDouble(&isNumber);
-                        if(isNumber)
-                        {
-                            foundKeys[messageElement.key()].value = value;
-                            foundKeys[messageElement.key()].isSet = true;
-                        }
-                        else
-                        {
-                            errorStream << "Key " << messageElement.key() << " is not number\n";
-                        }
-                    }
-                    else
-                    {
-                        errorStream << "Key " << messageElement.key() << " in JSON is not type of string\n";
-                    }
-                }
-            }
+            findValuesForFields(foundKeys, messageObject);
+        
             bool isAllFound = true;
             QString notFoundKeys = "";
             for (auto mapPair = foundKeys.begin(); mapPair != foundKeys.end(); ++ mapPair)
@@ -64,6 +70,7 @@ StatusEnum DisplayPlugin::receiveMessage(QString message, QTextStream &errorStre
                     notFoundKeys = notFoundKeys + mapPair.key() + " ";
                 }
             }
+
             if (isAllFound)
             {
                 double v = foundKeys["value"].value, min = foundKeys["minValue"].value, max = foundKeys["maxValue"].value, valueToSet;

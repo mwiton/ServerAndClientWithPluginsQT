@@ -20,6 +20,29 @@ QSharedPointer<QWidget> DisplayPlugin::getWidget()
     return m_DisplayWidget;
 }
 
+QPair <QString, bool> DisplayPlugin::getStringFromJSON(const QJsonObject &messageObject, const QString &nameOfValue, QTextStream &errorStream)
+{
+    QPair <QString, bool> value{"", false};
+    if (messageObject.contains(nameOfValue))
+    {
+        auto valueObject = messageObject.value(nameOfValue);
+        if (valueObject.isString())
+        {
+            value.first = valueObject.toString();
+            value.second = true;
+        }
+        else
+        {
+            errorStream << nameOfValue << " field does not contain string\n";
+        }
+    }
+    else
+    {
+        errorStream << "In JSON message there is no " << nameOfValue << " field\n";
+    }
+    return value;
+}
+
 StatusEnum DisplayPlugin::receiveMessage(QString message, QTextStream &errorStream)
 {
     StatusEnum status = StatusEnum::FAILURE;
@@ -31,100 +54,36 @@ StatusEnum DisplayPlugin::receiveMessage(QString message, QTextStream &errorStre
         {
             auto messageObject = jsonMessage.object();
             bool allFieldsFound = true;
+            auto valueFromJson = getStringFromJSON(messageObject, "text", errorStream);
+            QString text = valueFromJson.first;
+            allFieldsFound = valueFromJson.second : allFieldsFound ? false;
 
-            QString text;
-            if (messageObject.contains("text"))
+            valueFromJson = getStringFromJSON(messageObject, "color", errorStream);
+            QString colorStylesheet = "QLabel { color : " + valueFromJson.first + "; }";
+            allFieldsFound = valueFromJson.second : allFieldsFound ? false;
+
+            bool isNumber = false;
+            valueFromJson = getStringFromJSON(messageObject, "size", errorStream);
+            int size = valueFromJson.first.toInt(&isNumber);
+            allFieldsFound = valueFromJson.second : allFieldsFound ? false;
+            if(!isNumber)
             {
-                auto textValue = messageObject.value("text");
-                if (textValue.isString())
-                {
-                    text = textValue.toString();
-                }
-                else
-                {
-                    errorStream << "Text field does not contain string\n";
-                    allFieldsFound = false;
-                }
-            }
-            else
-            {
-                errorStream << "In JSON message there is no text field\n";
+                errorStream << "Size field is not integer\n";
                 allFieldsFound = false;
             }
 
-            QString colorStylesheet;
-            if (messageObject.contains("color"))
-            {
-                auto colorValue = messageObject.value("color");
-                if (colorValue.isString())
-                {
-                    colorStylesheet = "QLabel { color : " + colorValue.toString() + "; }";
-                }
-                else
-                {
-                    errorStream << "Color field does not contain string\n";
-                    allFieldsFound = false;
-                }
-            }
-            else
-            {
-                errorStream << "In JSON message there is no color field\n";
-                allFieldsFound = false;
-            }
-
-            int size=0;
-            if (messageObject.contains("size"))
-            {
-                auto sizeValue = messageObject.value("size");
-
-                if (sizeValue.isString())
-                {
-                    bool isNumber = false;
-                    size = sizeValue.toString().toInt(&isNumber);
-                    if(!isNumber)
-                    {
-                        errorStream << "Size field is not integer\n";
-                        allFieldsFound = false;
-                    }
-                }
-                else
-                {
-                    errorStream << "Size field does not contain string\n";
-                    allFieldsFound = false;
-                }
-            }
-            else
-            {
-                errorStream << "In JSON message there is no size field\n";
-                allFieldsFound = false;
-            }
-
+            valueFromJson = getStringFromJSON(messageObject, "alignRight", errorStream);
             bool alignToRight=false;
-            if (messageObject.contains("alignRight"))
+            if (valueFromJson.first.toString() == "true" || valueFromJson.first.toString() == "false")
             {
-                auto alignValue = messageObject.value("alignRight");
-                if (alignValue.isString() && (alignValue.toString() == "true" || alignValue.toString() == "false"))
-                {
-                    if (alignValue.toString() == "true")
-                    {
-                        alignToRight = true;
-                    }
-                    else
-                    {
-                        alignToRight = false;
-                    }
-                }
-                else
-                {
-                    errorStream << "alignRight field does not contain bool value\n";
-                    allFieldsFound = false;
-                }
+                alignToRight = valueFromJson.first.toString() == "true";
             }
             else
             {
-                errorStream << "In JSON message there is no alignRight field\n";
+                errorStream << "alignRight field does not contain bool value\n";
                 allFieldsFound = false;
             }
+            allFieldsFound = valueFromJson.second : allFieldsFound ? false;
 
             if (allFieldsFound)
             {

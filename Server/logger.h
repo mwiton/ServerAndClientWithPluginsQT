@@ -3,13 +3,23 @@
 
 #include <QTextStream>
 
+/**
+ *  Class which receives string communications from other classes and sends to connected classes
+ */
+
 class Logger : public QObject {
     Q_OBJECT
 
 public:
+    /**
+     *  Get one created instance of logger
+     */
     static Logger& getLogger();
 
 signals:
+    /**
+     *  Signal with message sent from some class
+     */
     void broadcastMessage(QString message);
 
 private:

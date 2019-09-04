@@ -12,6 +12,9 @@ namespace Ui {
 class MainWindow;
 }
 
+/**
+ *  Class which represents GUI window
+ */
 class MainWindow : public QMainWindow
 {
     Q_OBJECT
@@ -21,9 +24,16 @@ public:
     ~MainWindow();
 
 public slots:
+    /**
+     *  Sends received message from server to loaded plugin object
+     *  @param Content of message
+     */
     void sendMessageToPlugin(QString data);
 
 private slots:
+    /**
+     *  Shows file choosing window for dll plugin
+     */
     void choosePluginFile();
 
 private:
@@ -34,6 +44,7 @@ private:
     Logger &m_Logger;
     QSharedPointer<ServerForClients> serverObject;
 
+    // Shows widget from plugin in GUI window
     void setPluginDisplay();
 };
 

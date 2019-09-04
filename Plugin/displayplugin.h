@@ -26,6 +26,9 @@ private:
         double value = 0.0;
     };
 
+    // Find keys in json message and get value
+    void findValuesForFields(QMap<QString, JsonValue> &foundKeys, const QJsonObject &messageObject, QTextStream &errorStream);
+
     QSharedPointer<Display> m_DisplayWidget;
     const QString m_PluginName;
     QMutex mutex;

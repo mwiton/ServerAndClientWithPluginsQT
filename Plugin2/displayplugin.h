@@ -21,6 +21,9 @@ public:
     virtual StatusEnum receiveMessage(QString message, QTextStream &errorStream) override;
 
 private:
+    // get value of field sent in JSON
+    QPair <QString, bool> DisplayPlugin::getStringFromJSON(const QJsonObject &messageObject, const QString &nameOfValue, QTextStream &errorStream);
+
     QSharedPointer<Display> m_DisplayWidget;
     const QString m_PluginName;
     QMutex mutex;

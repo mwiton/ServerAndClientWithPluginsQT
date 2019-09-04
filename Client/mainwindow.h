@@ -9,19 +9,33 @@ namespace Ui {
 class MainWindow;
 }
 
+/**
+ *  Class which represents GUI window
+ */
 class MainWindow : public QMainWindow
 {
     Q_OBJECT
 
 public:
+    /**
+     *  Constructor
+     */
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
 
 private slots:
+    /**
+     *  Shows window with possibility to choose JSON schema
+     */
     void choosePluginFile();
+
+    /**
+     *  Sends JSON message with values set by user when user clicks the button
+     */
     void sendJsonMessage();
 
 private:
+    // Shows form layout with input fields in GUI window
     void setFormLayout();
 
     Ui::MainWindow *ui;
